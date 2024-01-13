@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Trade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .user-details-nav {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .form-section {
+            padding: 20px;
+        }
+
+        .checkbox-label {
+            padding-left: 20px;
+        }
+
+        .submit-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">Bartering System</a>
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="user-details-nav">
+                <a href="/user" style="text-decoration: none;">
+                    <span class="navbar-text mr-3" th:text="${currentUser.fullName}"></span>
+                </a>
+                <a href="/logout" class="btn btn-outline-light logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${'Start a Trade with ' + user.fullName}" class="card-title"></h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/trade/create}" method="post">
+
+                    <!-- Select Your Items -->
+                    <div class="form-section">
+                        <h3>Select Your Items:</h3>
+                        <div class="form-check" th:each="item : ${userItems}">
+                            <input type="checkbox" class="form-check-input" th:id="${'userItem_' + item.id}" th:name="offeredItemIds" th:value="${item.id}">
+                            <label class="form-check-label checkbox-label" th:for="${'userItem_' + item.id}" th:text="${item.name}"></label>
+                        </div>
+                    </div>
+
+                    <!-- Select Target User's Items -->
+                    <div class="form-section">
+                        <h3>Select Target User's Items:</h3>
+                        <div class="form-check" th:each="item : ${targetUserItems}">
+                            <input type="checkbox" class="form-check-input" th:id="${'targetUserItem_' + item.id}" th:name="requestedItemIds" th:value="${item.id}">
+                            <label class="form-check-label checkbox-label" th:for="${'targetUserItem_' + item.id}" th:text="${item.name}"></label>
+                        </div>
+                    </div>
+                    <input type="hidden" name="initiatorId" th:value="${trade.initiator.id}">
+                    <input type="hidden" name="targetUserId" th:value="${trade.targetUser.id}">
+                    <button type="submit" class="btn btn-primary submit-button">Send Trade</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include your JavaScript files or link to Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
